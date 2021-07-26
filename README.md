@@ -1,3 +1,17 @@
+---
+page_type: sample
+languages:
+- csharp
+- dotnet
+name: ".NET Core Azure Function to send email to/with Office 365"
+description: "Azure Fucntion that receives a POST request then sends email."
+products:
+- azure
+- dotnet-core
+services:
+- azure-functions
+---
+
 # Send email through SMTP
 
 Created to send email via an Azure Function, using .NET Core, through Office 365. 
