@@ -1,57 +1,89 @@
-# Project Name
+# Send email through SMTP
 
-(short, 1-3 sentenced, description of the project)
+Created to send email via an Azure Function, using .NET Core, through Office 365. 
 
-## Features
+## Setup
 
-This project framework provides the following features:
+* Clone repo
+* Publish Azure Function to Azure Functions
+* Get Azure Function's Function Key - required to access function
 
-* Feature 1
-* Feature 2
-* ...
+## To Use
 
-## Getting Started
+* Edit `data.json`, found in root of this project, with your own values:
 
-### Prerequisites
+	```json
+	{
+	  "toEmail": "johnsmith@contoso.com",
+	  "textSubject": "testing Azure function",
+	  "textBody": "hello body",
+	  "fromAccountEmail": "<REPLACE-WITH-YOUR-0365-ACCOUNT>@microsoft.com",
+	  "fromAccountPassword": "<REPLACE-WITH-YOUR-0365-ACCOUNT-PASSWORD>",
+	  "smtpHost": "smtp.office365.com",
+	  "smtpPort": "587",
+	  "fromAccountDomain": "microsoft.com"
+	}
+	```
 
-(ideally very short, if any)
+* Example HTTP command: 
 
-- OS
-- Library version
-- ...
+    ```http
+    POST /api/sendemail?code=<REPLACE_WITH-YOUR-FUNCTION-RESOURCE-FUNCTION-KEY> HTTP/1.1
+	Host: <REPLACE_WITH-YOUR-FUNCTION-RESOURCE-NAME>.azurewebsites.net
+	Content-Type: application/json
+	Cache-Control: no-cache
 
-### Installation
+	{
+		toEmail: "johnsmith@contoso.com",
+		textSubject: "testing Azure function",
+		textBody: "hello body",
+		fromAccountEmail:"<REPLACE-WITH-YOUR-0365-ACCOUNT>@microsoft.com",
+		fromAccountPassword:"<REPLACE-WITH-YOUR-0365-ACCOUNT-PASSWORD>"
+		smtpHost: "smtp.office365.com"
+		smtpPort: "587"
+	}
+    ```
 
-(ideally very short)
+	Use the table to understand the replacements:
 
-- npm install [package name]
-- mvn install
-- ...
+	|Term|Replacement|
+	|--|--|
+	|`<REPLACE_WITH-YOUR-FUNCTION-RESOURCE-NAME>`|String: your Azure Function resource name|
+	|`<REPLACE_WITH-YOUR-FUNCTION-RESOURCE-FUNCTION-KEY>`|String: your Azure Function resource's function key. The function returns auth error if the key is not sent.|
+	|`<REPLACE-WITH-YOUR-0365-ACCOUNT>`|String: your 0365 User account.|
+	|`<REPLACE-WITH-YOUR-0365-ACCOUNT-PASSWORD>`|String: your 0365 User account password.|
 
-### Quickstart
-(Add steps to get up and running quickly)
+	Execute the cURL command from a bash terminal in the root of this project so that the `data.json` file doesn't need any path resolution. Make sure to change the following command to use your Azure Function name and key
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+	```CURL
+	curl -v -X POST \
+	-H 'Content-type: application/json' \
+	-d @data.json 'https://<REPLACE_WITH-YOUR-FUNCTION-RESOURCE-NAME>.azurewebsites.net/api/sendemail?code=<REPLACE_WITH-YOUR-FUNCTION-RESOURCE-FUNCTION-KEY>'
+	```
 
+## Caveats
 
-## Demo
+This Azure function can't be successfully run from a local machine due to the restrictions of the SMTP client usage from Office 365. See [Documentation references](#documentation-references) for details. 
 
-A demo app is included to show how to use the project.
+## Watch Azure Function Log stream
 
-To run the demo, follow these steps:
+When you test this Azure-deployed function, use the [Azure portal](https://portal.azure.com) to watch this Azure Function's Log stream. Successful logging output looks something like:
 
-(Add steps to start up the demo)
+```console
+2021-07-26T16:00:30.000 [Information] Executing 'SendEmail' (Reason='This function was programmatically called via the host APIs.', Id=dde6166f-8833-4a7f-b40d-c9c7d2fc48ca)
+2021-07-26T16:00:30.000 [Information] sendemail
+2021-07-26T16:00:30.001 [Information] sendemail received data
+2021-07-26T16:00:30.001 [Information] sendemail fetched variables
+2021-07-26T16:00:30.004 [Information] sendemail got variables
+2021-07-26T16:00:30.005 [Information] sendemail client constructed
+2021-07-26T16:00:30.005 [Information] sendemail mail constructed
+2021-07-26T16:00:31.373 [Information] sendemail mail sent
+2021-07-26T16:00:31.374 [Information] Executed 'SendEmail' (Succeeded, Id=dde6166f-8833-4a7f-b40d-c9c7d2fc48ca, Duration=1374ms)
+```
 
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
+## Documentation references
+	
+* [How to set up SMTP AUTH client submission](https://docs.microsoft.com/en-us/Exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365?redirectSourcePath=%252fen-us%252farticle%252fHow-to-set-up-a-multifunction-device-or-application-to-send-email-using-Office-365-69f58e99-c550-4274-ad18-c805d654b4c4)
+* [5.7.57 SMTP - Client was not authenticated to send anonymous mail during MAIL FROM error](https://stackoverflow.com/questions/30342884/5-7-57-smtp-client-was-not-authenticated-to-send-anonymous-mail-during-mail-fr)
+	
 - ...
