@@ -4,7 +4,7 @@ languages:
 - csharp
 - dotnet
 name: ".NET Core Azure Function to send email to/with Office 365"
-description: "Azure Fucntion that receives a POST request then sends email."
+description: "Azure Function that receives a POST request then sends email."
 products:
 - azure
 - dotnet-core
