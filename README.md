@@ -8,6 +8,9 @@ description: "Azure Function that receives a POST request then sends email."
 products:
 - azure
 - dotnet-core
+- office-365
+- office-exchange-server
+- office-outlook
 services:
 - azure-functions
 ---
