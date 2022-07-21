@@ -2,7 +2,6 @@
 page_type: sample
 languages:
 - csharp
-- dotnet
 name: ".NET Core Azure Function to send SMTP email to/with Office 365"
 description: "Azure Function that receives a POST request then sends email."
 products:
