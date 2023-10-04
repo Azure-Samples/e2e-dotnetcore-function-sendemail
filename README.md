@@ -7,7 +7,7 @@ name: ".NET Core Azure Function to send SMTP email to/with Office 365"
 description: "Azure Function that receives a POST request then sends email."
 products:
 - azure
-- dotnet-core
+- dotnet
 - office-365
 - office-exchange-server
 - office-outlook
